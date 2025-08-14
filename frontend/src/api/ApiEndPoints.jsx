@@ -3,6 +3,7 @@ export const baseUrl = "http://localhost:3000";
 
 export const Auth_login_Api = `${baseUrl}/api/v4/auth/login`;
 export const Auth_signup_Api = `${baseUrl}/api/v4/auth/signup`;
+export const Auth_profile_Api =`${baseUrl}/api/v4/auth/profile`;
 export const Auth_forgotpass_Api = `${baseUrl}/api/v4/auth/forgot-password`;
 //add product
 export const Add_Product_Api= `${baseUrl}/api/v4/addproduct`;
@@ -21,3 +22,7 @@ export const cart_summary =`${baseUrl}/api/cart/cartsummary`;
 export const add_to_wishlist =`${baseUrl}/api/wishlist/add`;
 export const get_to_wishlist =`${baseUrl}/api/wishlist/get`;
 export const remove_to_wishlist =`${baseUrl}/api/wishlist/remove`;
+//order
+export const create_order =`${baseUrl}/api/order/createorder`;
+export const my_order = `${baseUrl}/api/order/myorder`;
+export const seller_order =`${baseUrl}/api/order/sellerorders`;

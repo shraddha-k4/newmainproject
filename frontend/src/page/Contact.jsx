@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import contact from '../assets/images/contact.png'; 
+import Footer from './Footer.jsx';
 
 // Animation Variants
 const slideInLeft = {
@@ -49,6 +50,7 @@ const Contact = () => {
   };
 
   return (
+    <>
     <div
       className="bg-cover bg-center bg-no-repeat  px-4 py-12 md:px-6 lg:px-12 text-gray-900"
       style={{
@@ -146,6 +148,8 @@ const Contact = () => {
         </div>
       </motion.div>
     </div>
+    <Footer/>
+    </>
   );
 };
 

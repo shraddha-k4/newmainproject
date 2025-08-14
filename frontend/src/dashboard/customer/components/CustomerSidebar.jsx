@@ -66,15 +66,15 @@ const CustomerSidebar = () => {
   return (
     <motion.aside
       animate={{ width: 240 }}
-      className="hidden md:flex bg-orange-500 shadow h-full flex-col transition-all duration-300"
+      className="hidden md:flex bg-orange-500 shadow min-h-full  h-screen flex-col transition-all duration-300"
     >
-      <div className="p-4 border-b flex items-center justify-between bg-orange-600">
+      <div className="p-4 border-b flex items-center justify-between  bg-orange-600">
         <span className="font-bold text-lg">Menu</span>
       </div>
       <nav className="flex flex-col p-2 space-y-2">
         <Link to="/customer/dashboard" className="hover:bg-orange-600 p-2 rounded">Dashboard</Link>
         <Link to="/customer/orders" className="hover:bg-orange-600 p-2 rounded">Orders</Link>
-        <Link to="/customer/wishlist" className="hover:bg-orange-600 p-2 rounded">Wishlist</Link>
+        <Link to="/wishlist" className="hover:bg-orange-600 p-2 rounded">Wishlist</Link>
         <Link to="/customer/profile" className="hover:bg-orange-600 p-2 rounded">Profile</Link>
       </nav>
     </motion.aside>

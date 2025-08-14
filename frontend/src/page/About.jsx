@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import Footer from './Footer.jsx';
 
 // Variants
 const fadeUp = {
@@ -26,6 +27,7 @@ const slideRight = {
 
 const About = () => {
   return (
+    <>
     <div
       className="bg-cover bg-center bg-no-repeat text-gray-800 px-4 py-12 sm:px-6 lg:px-12"
       style={{
@@ -137,6 +139,8 @@ const About = () => {
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 

@@ -75,7 +75,7 @@ const EditProduct = () => {
           <h2 className="text-2xl font-semibold mb-6 text-center">Edit Product</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {[
+            {/* {[
               { name: 'name', label: 'Product Name' },
               { name: 'brand', label: 'Brand' },
               { name: 'price', label: 'Price (₹)' },
@@ -86,6 +86,7 @@ const EditProduct = () => {
               { name: 'shelfLife', label: 'Shelf Life' },
               { name: 'manufacturer', label: 'Manufacturer' },
               { name: 'fssai', label: 'FSSAI Number' },
+              { name: 'mfgdate', label: 'Manufacture Date' },
             ].map(({ name, label }) => (
               <div key={name}>
                 <label className="block font-medium mb-1">{label}</label>
@@ -97,7 +98,37 @@ const EditProduct = () => {
                   className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
               </div>
+            ))} */}
+
+            {[
+              { name: 'name', label: 'Product Name', type: 'text' },
+              { name: 'brand', label: 'Brand', type: 'text' },
+              { name: 'price', label: 'Price (₹)', type: 'number' },
+              { name: 'size', label: 'Size (e.g. 1kg)', type: 'text' },
+              { name: 'description', label: 'Description', type: 'text' },
+              { name: 'ingredients', label: 'Ingredients', type: 'text' },
+              { name: 'idealFor', label: 'Ideal For', type: 'text' },
+              { name: 'shelfLife', label: 'Shelf Life', type: 'text' },
+              { name: 'manufacturer', label: 'Manufacturer', type: 'text' },
+              { name: 'fssai', label: 'FSSAI Number', type: 'text' },
+              { name: 'mfgdate', label: 'Manufacture Date', type: 'date' },
+            ].map(({ name, label, type }) => (
+              <div key={name}>
+                <label className="block font-medium mb-1">{label}</label>
+                <input
+                  type={type}
+                  name={name}
+                  value={
+                    name === 'mfgdate' && product[name]
+                      ? new Date(product[name]).toISOString().split('T')[0] // ensures YYYY-MM-DD
+                      : product[name]
+                  }
+                  onChange={handleChange}
+                  className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                />
+              </div>
             ))}
+
 
             <div className="text-center">
               <button

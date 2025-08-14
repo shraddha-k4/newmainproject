@@ -1,36 +1,116 @@
-// src/dashboard/Orders.jsx
-// import React from 'react';
-// import SellerSidebar from './SellerSidebar';
 
-// const sampleOrders = [
-//   { id: 101, customer: "Rahul", status: "Pending" },
-//   { id: 102, customer: "Sneha", status: "Delivered" },
-// ];
+// import React, { useEffect, useState } from "react";
+// import axios from "axios";
+// import SellerSidebar from "./SellerSidebar.jsx";
+// import SellerNavbar from "./SellerNavbar.jsx";
+// import { seller_order } from "../../api/ApiEndPoints.jsx";
 
 // const Orders = () => {
+//   const [orders, setOrders] = useState([]);
+//   const [loading, setLoading] = useState(true);
+
+//   const fetchSellerOrders = async () => {
+//     try {
+//       const token = localStorage.getItem("token");
+//       if (!token) {
+//         alert("Please login to view your orders");
+//         return;
+//       }
+
+//       const res = await axios.get(seller_order, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       });
+
+//       setOrders(res.data || []);
+//     } catch (error) {
+//       console.error("Error fetching seller orders:", error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   useEffect(() => {
+//     fetchSellerOrders();
+//   }, []);
+
 //   return (
-//     <div className="flex">
-//       <SellerSidebar />
-//       <div className="ml-64 p-10 w-full">
-//         <h2 className="text-2xl font-semibold mb-4">Orders</h2>
-//         <table className="w-full border">
-//           <thead className="bg-gray-100">
-//             <tr>
-//               <th className="p-2 border">Order ID</th>
-//               <th className="p-2 border">Customer</th>
-//               <th className="p-2 border">Status</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {sampleOrders.map((order) => (
-//               <tr key={order.id}>
-//                 <td className="p-2 border">{order.id}</td>
-//                 <td className="p-2 border">{order.customer}</td>
-//                 <td className="p-2 border">{order.status}</td>
-//               </tr>
+//     <div className="flex min-h-screen bg-gray-50">
+//       <div className="hidden md:block">
+//         <SellerSidebar />
+//       </div>
+//       <div className="flex-1 p-4 pb-20 md:pb-4">
+//         {/* <SellerNavbar /> */}
+//         <h2 className="mb-4 text-3xl font-bold text-green-800">Orders</h2>
+
+//         {loading ? (
+//           <p className="text-gray-500">Loading orders...</p>
+//         ) : orders.length === 0 ? (
+//           <p className="text-gray-500">No recent orders.</p>
+//         ) : (
+//           <div className="space-y-6">
+//             {orders.map((order) => (
+//               <div key={order._id} className="bg-white shadow rounded-lg p-4">
+//                 <div className="mb-2 text-sm text-gray-600">
+//                   <p>
+//                     <span className="font-semibold">Buyer:</span>{" "}
+//                     {order.buyer?.name} ({order.buyer?.email})
+//                   </p>
+//                   <p>
+//                     <span className="font-semibold">Order Date:</span>{" "}
+//                     {new Date(order.createdAt).toLocaleDateString()}
+//                   </p>
+//                   <p>
+//                     <span className="font-semibold">Status:</span>{" "}
+//                     <span
+//                       className={`font-bold ${
+//                         order.status === "Delivered"
+//                           ? "text-green-600"
+//                           : "text-yellow-600"
+//                       }`}
+//                     >
+//                       {order.status}
+//                     </span>
+//                   </p>
+//                 </div>
+
+//                 {order.items.map((item, idx) => {
+//                   const product = item.productId || {};
+//                   const imageUrl =
+//                     Array.isArray(product.images) && product.images.length > 0
+//                       ? product.images[0] // ✅ Cloudinary image URL
+//                       : "/placeholder.png";
+
+//                   return (
+//                     <div
+//                       key={idx}
+//                       className="flex items-center gap-4 border-t pt-4"
+//                     >
+//                       <img
+//                         src={imageUrl}
+//                         alt={product.name || "Product"}
+//                         className="w-16 h-16 object-contain rounded border"
+//                         onError={(e) => {
+//                           e.target.onerror = null;
+//                           e.target.src = "/placeholder.png";
+//                         }}
+//                       />
+//                       <div>
+//                         <p className="font-semibold">
+//                           {product.name || "Unnamed Product"}
+//                         </p>
+//                         <p>Quantity: {item.quantity}</p>
+//                         <p>Unit Price: ₹{item.price.toFixed(2)}</p>
+//                         <p>Item Total: ₹{item.totalAmount.toFixed(2)}</p>
+//                       </div>
+//                     </div>
+//                   );
+//                 })}
+//               </div>
 //             ))}
-//           </tbody>
-//         </table>
+//           </div>
+//         )}
 //       </div>
 //     </div>
 //   );
@@ -39,26 +119,159 @@
 // export default Orders;
 
 
-import React from 'react';
-import SellerSidebar from './SellerSidebar.jsx';
-import SellerNavbar from './SellerNavbar.jsx';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import SellerSidebar from "./SellerSidebar.jsx";
+import SellerNavbar from "./SellerNavbar.jsx";
+import { seller_order } from "../../api/ApiEndPoints.jsx";
 
 const Orders = () => {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchSellerOrders = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Please login to view your orders");
+        return;
+      }
+
+      const res = await axios.get(seller_order, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setOrders(res.data || []);
+    } catch (error) {
+      console.error("Error fetching seller orders:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStatusChange = async (orderId, newStatus) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(
+        `${seller_order}/${orderId}/status`,
+        { status: newStatus },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === orderId ? { ...order, status: newStatus } : order
+        )
+      );
+    } catch (error) {
+      console.error("Failed to update order status:", error);
+      alert("Status update failed");
+    }
+  };
+
+  useEffect(() => {
+    fetchSellerOrders();
+  }, []);
+
   return (
-    
-    <>
-      <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gray-50">
       <div className="hidden md:block">
         <SellerSidebar />
       </div>
       <div className="flex-1 p-4 pb-20 md:pb-4">
-      <SellerNavbar />
-      <h2 className="text-xl font-semibold">Orders</h2>
-        {/* map product list here */}
-       <p>No recent orders.</p>
+        {/* <SellerNavbar /> */}
+        <h2 className="mb-4 text-3xl font-bold text-green-800">Orders</h2>
+
+        {loading ? (
+          <p className="text-gray-500">Loading orders...</p>
+        ) : orders.length === 0 ? (
+          <p className="text-gray-500">No recent orders.</p>
+        ) : (
+          <div className="space-y-6">
+            {orders.map((order) => (
+              <div key={order._id} className="bg-white shadow rounded-lg p-4">
+                <div className="mb-2 text-sm text-gray-600">
+                  <p>
+                    <span className="font-semibold">Buyer:</span>{" "}
+                    {order.buyer?.name} ({order.buyer?.email})
+                  </p>
+                  <p>
+                    <span className="font-semibold">Order Date:</span>{" "}
+                    {new Date(order.createdAt).toLocaleDateString()}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Status:</span>{" "}
+                    <span
+                      className={`font-bold ${
+                        order.status === "Delivered"
+                          ? "text-green-600"
+                          : "text-yellow-600"
+                      }`}
+                    >
+                      {order.status}
+                    </span>
+                  </p>
+
+                  {/* Status Dropdown */}
+                  <select
+                    value={order.status}
+                    onChange={(e) =>
+                      handleStatusChange(order._id, e.target.value)
+                    }
+                    className="mt-2 p-2 border rounded"
+                  >
+                    <option value="Pending">Pending</option>
+                    <option value="Processing">Processing</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Cancelled">Cancelled</option>
+                  </select>
+                </div>
+
+                {order.items.map((item, idx) => {
+                  const product = item.productId || {};
+                  const imageUrl =
+                    Array.isArray(product.images) && product.images.length > 0
+                      ? product.images[0]
+                      : "/placeholder.png";
+
+                  return (
+                    <div
+                      key={idx}
+                      className="flex items-center gap-4 border-t pt-4"
+                    >
+                      <img
+                        src={imageUrl}
+                        alt={product.name || "Product"}
+                        className="w-16 h-16 object-contain rounded border"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "/placeholder.png";
+                        }}
+                      />
+                      <div>
+                        <p className="font-semibold">
+                          {product.name || "Unnamed Product"}
+                        </p>
+                        <p>Quantity: {item.quantity}</p>
+                        <p>Unit Price: ₹{item.price.toFixed(2)}</p>
+                        <p>Item Total: ₹{item.totalAmount.toFixed(2)}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
-   </div>
-    </>
   );
 };
 

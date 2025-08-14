@@ -1,61 +1,12 @@
-// import { Order } from "../model/Order.js";
-// import  Product  from "../model/Product.js";
-
-
-// export const addProduct = async (req, res) => {
-//   try {
-
-//     // console.log("Body:",req.body);
-//     // console.log("Files:",req.files);
-//     //  console.log("User ID:", req.user?.id);
-//     const {
-//       name,
-//       brand,
-//       price,
-//       description,
-//       ingredients,
-//       category,
-//       idealFor,
-//       shelfLife,
-//       manufacturer,
-//       fssai,
-//       size
-//     } = req.body;
-
-//     if (!req.files || req.files.length === 0) {
-//       return res.status(400).json({ message: "No images uploaded" });
-//     }
-
-
-//     // const imagePaths = req.files.map(file => file.path);
-//     const imagePaths = req.files.map(file => `uploads/${file.filename}`);
-
-
-//     const newProduct = new Product({
-//       name, brand, price, description,
-//       ingredients, idealFor, shelfLife,category,
-//       manufacturer, fssai, size,
-//       images: imagePaths,
-//       seller: req.user.id
-//     });
-
-//     await newProduct.save();
-//     res.status(201).json({ message: 'Product created', product: newProduct });
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
-
-// controller/productController.js
 
 import Product from '../model/Product.js';
 import cloudinary from '../config/cloudinary.js';
 import fs from 'fs';
-import {Order} from '../model/Order.js'
+import Order from '../model/Order.js'
 
 export const addProduct = async (req, res) => {
   try {
-    const { name, brand, price, description, ingredients, idealFor, shelfLife, manufacturer, category, fssai, size } = req.body;
+    const { name, brand, price, description, ingredients, idealFor, shelfLife, manufacturer, category, fssai, size, mfgdate } = req.body;
 
     let imageUrls = [];
 
@@ -84,6 +35,7 @@ export const addProduct = async (req, res) => {
       fssai,
       size,
       images: imageUrls,
+       mfgdate,
       seller: req.user.id, // from verifyToken middleware
     });
 
@@ -142,16 +94,28 @@ export const getSingleProduct = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-
-// export const updateProduct = async (req, res) => {
+// export const getSingleProduct = async (req, res) => {
 //   try {
-//     const updated = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
-//     res.json(updated);
+//     const product = await Product.findById(req.params.id);
+//     if (!product) return res.status(404).json({ message: 'Not found' });
+
+//     const formattedProduct = {
+//       ...product.toObject(),
+//       mfgdate: product.mfgdate
+//         ? product.mfgdate.toLocaleDateString('en-GB', {
+//             day: '2-digit',
+//             month: 'short',
+//             year: 'numeric'
+//           })
+//         : null
+//     };
+
+//     res.json(formattedProduct);
 //   } catch (err) {
 //     res.status(500).json({ message: err.message });
 //   }
 // };
-// backend/src/controller/productController.js
+
 
 export const updateProduct = async (req, res) => {
   try {
@@ -186,34 +150,88 @@ export const updateProduct = async (req, res) => {
   }
 };
 
+// export const updateProduct = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const updatedData = req.body;
 
+//     const trimmedId = id.trim();
+
+//     // Handle Cloudinary image upload
+//     if (req.files && req.files.length > 0) {
+//       const uploadPromises = req.files.map((file) => {
+//         return cloudinary.uploader.upload(file.path, {
+//           folder: 'products',
+//         });
+//       });
+
+//       const results = await Promise.all(uploadPromises);
+//       const imageUrls = results.map((result) => result.secure_url);
+//       updatedData.images = imageUrls;
+//     }
+
+//     const updatedProduct = await Product.findByIdAndUpdate(
+//       trimmedId,
+//       updatedData,
+//       { new: true }
+//     );
+
+//     // Format mfgdate before sending response
+//     const formattedProduct = {
+//       ...updatedProduct.toObject(),
+//       mfgdate: updatedProduct.mfgdate
+//         ? updatedProduct.mfgdate.toLocaleDateString('en-GB', {
+//             day: '2-digit',
+//             month: 'short',
+//             year: 'numeric'
+//           })
+//         : null
+//     };
+
+//     res.status(200).json(formattedProduct);
+//   } catch (err) {
+//     res.status(500).json({ message: 'Update failed', error: err });
+//   }
+// };
 
 export const getSellerSummary = async (req, res) => {
   try {
     const sellerId = req.user.id;
 
+    // 1. Count seller's products
     const totalProducts = await Product.countDocuments({ seller: sellerId });
 
-    const totalOrders = await Order.countDocuments({ seller: sellerId });
+    // 2. Get all product IDs of this seller
+    const sellerProducts = await Product.find({ seller: sellerId }).select("_id");
+    const productIds = sellerProducts.map(p => p._id.toString());
 
-    const totalEarningsResult = await Order.aggregate([
-      { $match: { seller: sellerId, status: 'Delivered' } },
-      {
-        $group: {
-          _id: null,
-          total: { $sum: "$totalAmount" }
+    // 3. Find orders that include any of these products
+    const orders = await Order.find({ "items.productId": { $in: sellerProducts } });
+
+    // 4. Count how many times seller's products appear in order items
+    let totalOrderedProducts = 0;
+    let totalEarnings = 0;
+
+    orders.forEach(order => {
+      order.items.forEach(item => {
+        const itemProductId = item.productId.toString();
+        if (productIds.includes(itemProductId)) {
+          totalOrderedProducts += 1; // ✅ Count product appearance, not quantity
+
+          if (order.status === "Delivered") {
+            totalEarnings += item.totalAmount;
+          }
         }
-      }
-    ]);
-
-    const totalEarnings = totalEarningsResult.length > 0 ? totalEarningsResult[0].total : 0;
+      });
+    });
 
     res.json({
       totalProducts,
-      totalOrders,
-      totalEarnings
+      totalOrders: totalOrderedProducts, // ✅ Total product appearances in orders
+      totalEarnings,
     });
   } catch (err) {
+    console.error("Error in getSellerSummary:", err);
     res.status(500).json({ message: err.message });
   }
 };

@@ -17,16 +17,31 @@ const LoginForm = () => {
 
   // ✅ Redirect if already logged in
   useEffect(() => {
-    if (authed) {
-      if (role === "seller") {
-        navigate("/seller/dashboard");
-      } else if (role === "customer") {
-        navigate("/customer-dashboard");
+    // if (authed) {
+    //   if (role === "seller") {
+    //     navigate("/seller/profile");
+    //   } else if (role === "customer") {
+    //     navigate("/customer-dashboard");
+    //   } else {
+    //     navigate("/");
+    //   }
+    // }
+    if (authed && role === "seller") {
+      if (window.innerWidth >= 1024) {
+        // Laptop or desktop
+        navigate("/seller/profile/user");
       } else {
-        navigate("/");
+        // Mobile or tablet
+        navigate("/seller/profile");
       }
+    } else if (authed && role !== "seller") {
+      navigate("/customer-dashboard");
+    } else {
+      navigate("/profile");
     }
+
   }, [authed, role, navigate]);
+
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -72,7 +87,7 @@ const LoginForm = () => {
 
   return (
     <motion.div
-      className="max-w-sm mx-auto p-4"
+      className="max-w-sm mx-auto p-4 "
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
@@ -92,7 +107,7 @@ const LoginForm = () => {
       )}
 
       {!showForgot ? (
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 ">
           <motion.input
             type="email"
             name="email"
@@ -100,7 +115,7 @@ const LoginForm = () => {
             onChange={handleChange}
             required
             whileFocus={{ scale: 1.02 }}
-            className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600"
           />
           <motion.input
             type="password"
@@ -109,13 +124,13 @@ const LoginForm = () => {
             onChange={handleChange}
             required
             whileFocus={{ scale: 1.02 }}
-            className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600"
           />
           <motion.button
             type="submit"
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="w-full bg-blue-500 text-white py-2 rounded-xl hover:bg-blue-600 transition"
+            className="w-full bg-green-500 text-white py-2 rounded-xl hover:bg-green-600 transition"
           >
             Log In
           </motion.button>
@@ -144,7 +159,7 @@ const LoginForm = () => {
             value={resetEmail}
             onChange={(e) => setResetEmail(e.target.value)}
             whileFocus={{ scale: 1.02 }}
-            className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-green-600"
           />
           <motion.button
             onClick={handlePasswordReset}

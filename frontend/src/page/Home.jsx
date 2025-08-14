@@ -1,5 +1,7 @@
 import React from 'react'
 import Hide from '../component/Hide.jsx'
+import Footer from './Footer.jsx'
+import Certificate from '../component/Certificate.jsx'
 
 
 const Home = () => {
@@ -7,8 +9,12 @@ const Home = () => {
     <>
       <div>
         <Hide />
-      </div>     
 
+      </div>  
+      <div>
+        <Certificate/>
+      </div>   
+      <Footer/>
     </>
   )
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { baseUrl, get_to_cart, remove_cart } from "../api/ApiEndPoints.jsx"
 import Navbar from "../component/Navbar.jsx";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -69,7 +69,7 @@ const Cart = () => {
             {cartItems.map((item) => (
               <div
                 key={item.productId?._id}
-                className="flex items-center justify-between border p-4 rounded shadow"
+                className="flex items-center justify-between  p-4 rounded shadow-xl"
               >
                 <div className="flex items-center gap-4">
                   <img
@@ -103,9 +103,9 @@ const Cart = () => {
                 <p className="text-xl font-bold text-green-800">
                   Total: ₹{total}
                 </p>
-                <button className="mt-2 px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                <Link to='/purchase/:id'><button className="mt-2 px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700">
                   Proceed to Checkout
-                </button>
+                </button></Link>
               </div>
             </div>
           </div>

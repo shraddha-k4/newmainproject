@@ -6,6 +6,7 @@ import route from './src/route/AuthRoute.js';
 import addproductRouter from './src/route/addproductRoutes.js';
 import cartRoute from './src/route/cartRoute.js';
 import wishlistrouter from './src/route/wishlistRoute.js';
+import orderrouter from './src/route/OrderRoute.js';
 
 
 
@@ -32,6 +33,9 @@ app.use('/api/cart',cartRoute);
 
 //call wishlistRoute
 app.use('/api/wishlist',wishlistrouter);
+
+//call orderRoute
+app.use('/api/order',orderrouter)
 
 app.get('/',(req,res)=>{
     res.send("hello");

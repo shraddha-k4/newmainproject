@@ -1,17 +1,19 @@
 
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FaBoxOpen, FaPlus, FaShoppingBag, FaBars } from 'react-icons/fa';
+import { FaBoxOpen, FaPlus, FaShoppingBag, FaBars, FaUserAlt } from 'react-icons/fa';
 
 const SellerSidebar = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
 
   const links = [
+    {to:'/seller/profile/user',label: 'Profile', icon:<FaUserAlt/>},
     { to: '/seller/dashboard', label: 'Dashboard', icon: <FaBoxOpen /> },
     { to: '/seller/add-product', label: 'Add Product', icon: <FaPlus /> },
     { to: '/seller/my-products', label: 'My Products', icon: <FaBoxOpen /> },
     { to: '/seller/orders', label: 'Orders', icon: <FaShoppingBag /> },
+    {to:'/customer/orders',label:'My Orders',icon:<FaShoppingBag/>},
   ];
 
   return (

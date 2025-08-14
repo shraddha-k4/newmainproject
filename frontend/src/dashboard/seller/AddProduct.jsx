@@ -104,11 +104,11 @@ const AddProduct = () => {
   return (
     <div className="flex min-h-screen">
       <div className="hidden md:block">
-        <SellerSidebar/>
+        <SellerSidebar />
       </div>
 
       <div className="flex-1 p-4 pb-20 md:pb-4">
-        <SellerNavbar />
+        {/* <SellerNavbar /> */}
 
         <motion.div
           className="max-w-3xl mx-auto"
@@ -154,7 +154,7 @@ const AddProduct = () => {
             {/* Add spacing after category */}
             <div className="h-1" />
 
-            {[
+            {/* {[
               {
                 name: 'name',
                 placeholder: 'Product Name',
@@ -196,6 +196,11 @@ const AddProduct = () => {
                 placeholder: 'FSSAI Number',
                 label: 'FSSAI Number',
               },
+              {
+                name: 'mfgdate',
+                placeholder: 'Manufacture Date',
+                label: 'MFG Date',
+              },
             ].map(({ name, placeholder, label }) => (
               <motion.div key={name} variants={inputVariants}>
                 <label
@@ -214,7 +219,38 @@ const AddProduct = () => {
                   className="border p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </motion.div>
+            ))} */}
+
+            {[
+              { name: 'name', placeholder: 'Product Name', label: 'Product Name', type: 'text' },
+              { name: 'brand', placeholder: 'Brand Name', label: 'Brand Name', type: 'text' },
+              { name: 'price', placeholder: 'Price', label: 'Price', type: 'number' },
+              { name: 'size', placeholder: 'Size (e.g. 1kg, 500g)', label: 'Size', type: 'text' },
+              { name: 'ingredients', placeholder: 'Ingredients', label: 'Ingredients', type: 'text' },
+              { name: 'idealFor', placeholder: 'Ideal For Making (e.g. Rotis, Parathas)', label: 'Ideal For', type: 'text' },
+              { name: 'shelfLife', placeholder: 'Shelf Life (e.g. 9 months)', label: 'Shelf Life', type: 'text' },
+              { name: 'manufacturer', placeholder: 'Marketed & Manufactured By', label: 'Manufacturer', type: 'text' },
+              { name: 'fssai', placeholder: 'FSSAI Number', label: 'FSSAI Number', type: 'text' },
+              { name: 'mfgdate', placeholder: 'Manufacture Date', label: 'MFG Date', type: 'date' }
+            ].map(({ name, placeholder, label, type }) => (
+              <motion.div key={name} variants={inputVariants}>
+                <label htmlFor={name} className="block font-medium mb-1 text-gray-800">
+                  {label}
+                </label>
+                <input
+                  id={name}
+                  type={type}
+                  name={name}
+                  placeholder={placeholder}
+                  value={form[name]}
+                  onChange={handleChange}
+                  className="border p-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </motion.div>
             ))}
+
+
+
 
             {/* Description textarea */}
             <motion.div variants={inputVariants}>
@@ -258,7 +294,7 @@ const AddProduct = () => {
               )}
             </motion.div>
 
-              <div className="h-4" />
+            <div className="h-4" />
 
             {/* Submit Button */}
             <motion.button

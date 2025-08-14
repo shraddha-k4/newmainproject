@@ -100,7 +100,7 @@ const MyProducts = () => {
       </div>
 
       <div className="flex-1 p-4 overflow-x-auto">
-        <SellerNavbar />
+        {/* <SellerNavbar /> */}
         <h2 className="text-3xl font-bold text-green-800">My Products</h2>
         <div className="h-4" />
 
@@ -127,6 +127,7 @@ const MyProducts = () => {
                 <th className="p-3 border border-gray-500">Manufacturer</th>
                 <th className="p-3 border border-gray-500">FSSAI</th>
                 <th className="p-3 border border-gray-500">Size</th>
+                <th className="p-3 border border-gray-500">MFG Date</th>
                 <th className="p-3 border border-gray-500">Actions</th>
               </tr>
             </thead>
@@ -217,6 +218,13 @@ const MyProducts = () => {
                   <td className="p-3 border border-gray-500">{product.manufacturer || '-'}</td>
                   <td className="p-3 border border-gray-500">{product.fssai || '-'}</td>
                   <td className="p-3 border border-gray-500">{product.size || '-'}</td>
+                  {/* <td className="p-3 border border-gray-500">{product.mfgdate || '-'}</td> */}
+                  <td className="p-3 border border-gray-500">
+                    {product.mfgdate
+                      ? new Date(product.mfgdate).toLocaleDateString('en-GB') // DD/MM/YYYY format
+                      : '-'}
+                  </td>
+
                   <td className="p-3 border border-gray-500">
                     <div className="flex gap-2">
                       <button

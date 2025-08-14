@@ -10,6 +10,7 @@ import image5 from '../assets/imageslide/image5.png';
 import image6 from '../assets/imageslide/image6.png';
 import image7 from '../assets/imageslide/image7.png';
 
+
 // Custom Arrow Components
 const NextArrow = ({ onClick }) => (
   <div 
@@ -66,6 +67,7 @@ const Hide = () => {
           </motion.div>
         ))}
       </Slider>
+     
     </div>
   );
 };

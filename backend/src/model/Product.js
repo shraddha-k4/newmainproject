@@ -13,6 +13,10 @@ const productSchema = new mongoose.Schema({
   fssai: String,
   size: String,
   images: [String],
+  mfgdate: {
+    type: Date,
+    required: true 
+  },
   seller: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
