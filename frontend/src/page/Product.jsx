@@ -356,7 +356,7 @@ const Product = () => {
         <div className="flex gap-3 justify-start overflow-x-auto px-4 mt-6 mb-4 scrollbar-hide">
           <button
             onClick={() => setSelectedCategory("All")}
-            className={`flex-shrink-0 px-4 py-2 rounded-full border text-sm sm:text-base ${
+            className={`flex-shrink-0 px-4 py-2 rounded-full cursor-pointer border text-sm sm:text-base ${
               selectedCategory === "All" ? "bg-green-600 text-white" : "bg-white"
             }`}
           >
@@ -366,7 +366,7 @@ const Product = () => {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`flex-shrink-0 px-4 py-2 rounded-full border text-sm sm:text-base ${
+              className={`flex-shrink-0 px-4 py-2 rounded-full cursor-pointer border text-sm sm:text-base ${
                 selectedCategory === cat ? "bg-green-600 text-white" : "bg-white"
               }`}
             >

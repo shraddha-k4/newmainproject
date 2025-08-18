@@ -5,17 +5,12 @@ import Home from './page/Home.jsx';
 import Contact from './page/Contact.jsx';
 import Cart from './page/Cart.jsx';
 import Wishlist from './page/Wishlist.jsx';
-// import Notifications from './page/Notifications.jsx';
 import Product from './page/Product.jsx';
 import Profile from './page/Profile.jsx'
 import About from './page/About.jsx'
-// import Footer from './page/Footer.jsx';
-
 import ProtectedRoute from './route/ProtectedRoute.jsx';
-
 import CustomerDashboard from './dashboard/customer/CustomerDashboard.jsx';
 import { AuthProvider } from './useContext/AuthProvider.jsx';
-
 //seller dashboard
 import SellerDashboard from './dashboard/seller/SellerDashboard.jsx';
 import AddProduct from './dashboard/seller/AddProduct.jsx';
@@ -26,9 +21,9 @@ import SingleProduct from './page/SingleProduct.jsx';
 import PurchasePage from './page/PurchasePage.jsx';
 import CusOrder from './dashboard/customer/CusOrder.jsx';
 import SellerProfile from './dashboard/seller/SellerProfile.jsx';
-import Footer from './page/Footer.jsx';
-import SellerNavbar from './dashboard/seller/SellerNavbar.jsx';
 import User from './dashboard/seller/User.jsx';
+import CusUser from './dashboard/customer/CusUser.jsx';
+import Address from './page/Address.jsx';
 
 
 function App() {
@@ -46,13 +41,12 @@ function App() {
               <Route path='/contact' element={<Contact />} />
               <Route path='/cart' element={<Cart />} />
               <Route path='/wishlist' element={<Wishlist />} />
-              {/* <Route path='/notifications' element={<Notifications/>}/> */}
               <Route path='/product' element={<Product />} />
               <Route path="/product/:id" element={<SingleProduct />} />
               <Route path='/profile' element={<Profile />} />
               <Route path='/about' element={<About />} />
               <Route path="/purchase/:id" element={<PurchasePage />} />
-
+                <Route path='/address' element={<Address />} />
 
               {/* Seller Routes */}
               <Route path="/seller/profile" element={<ProtectedRoute allowedRoles={['seller']}><SellerProfile /></ProtectedRoute>} />
@@ -62,22 +56,20 @@ function App() {
               <Route path="/seller/orders" element={<ProtectedRoute allowedRoles={['seller']}><Orders /></ProtectedRoute>} />
               <Route path="/seller/editproduct/:id" element={<EditProduct />} />
               <Route path='/seller/profile/user' element={<ProtectedRoute allowedRoles={['seller']}><User /></ProtectedRoute>} />
+              
 
               {/* Customer Protected Route */}
               <Route path="/customer-dashboard" element={<ProtectedRoute allowedRoles={["customer"]}><CustomerDashboard /></ProtectedRoute>} />
-              {/* <Route path="/customer/orders" element={<ProtectedRoute allowedRoles={['customer,seller']}> <CusOrder />  </ProtectedRoute> } /> */}
+              <Route path="/customer/profile" element={<ProtectedRoute allowedRoles={["customer"]}><CusUser /></ProtectedRoute>} />
               <Route path="/customer/orders" element={ <CusOrder /> } />
 
 
             </Routes>
           </div>
-          {/* <Footer /> */}
-
         </AuthProvider>
       </BrowserRouter>
     </>
   )
 }
-
 
 export default App

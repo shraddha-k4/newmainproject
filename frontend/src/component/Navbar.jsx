@@ -6,32 +6,16 @@ import { IoMdSearch } from 'react-icons/io';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../useContext/AuthProvider.jsx';
 
-
-
 const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-
   const location = useLocation();
   const navigate = useNavigate();
   const { authed, logout } = useAuth();
-
   const isActive = (path) => location.pathname === path;
   const user = JSON.parse(localStorage.getItem('user'));
   const role = user?.role;
-
-  // const handleProfileClick = () => {
-  //   if (!authed) {
-  //     navigate('/profile');
-  //   } else {
-  //     if (role === 'seller') {
-  //       navigate('/seller/profile');
-  //     } else {
-  //       navigate('/customer-dashboard');
-  //     }
-  //   }
-  // };
 
   const handleProfileClick = () => {
     if (authed && role === "seller") {
@@ -48,6 +32,7 @@ const Navbar = () => {
       navigate("/profile");
     }
   };
+  
 
 
   const handleSearch = (e) => {
@@ -81,8 +66,8 @@ const Navbar = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleSearch}
               style={{
-          boxShadow: "0 0 10px rgba(34, 197, 94, 0.7)" // amber glow all 4 sides
-        }}
+                boxShadow: "0 0 10px rgba(34, 197, 94, 0.7)" // amber glow all 4 sides
+              }}
               className="w-full border  text-gray-700 rounded-full px-10 py-1 focus:outline-none  "
             />
             <IoMdSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-black text-lg"
@@ -116,13 +101,13 @@ const Navbar = () => {
                   </Link>
                   <button
                     onClick={logout}
-                    className="text-sm text-white bg-blue-600 p-1 rounded hover:bg-blue-800"
+                    className="text-sm text-white bg-blue-600 p-1 cursor-pointer rounded hover:bg-blue-800"
                   >
                     Logout
                   </button>
                 </motion.div>
               ) : (
-                <Link to="/profile" className="flex items-center gap-1 text-black hover:scale-80 hover:text-blue-600">
+                <Link to="/profile" className="flex items-center gap-1 text-black cursor-pointer hover:scale-80 hover:text-blue-600">
                   <FaUserCircle className="text-2xl" />
                   <span className="text-sm">Login</span>
                 </Link>
@@ -188,28 +173,17 @@ const Navbar = () => {
                 <NavLink to="/about" onClick={() => setMenuOpen(false)} className={({ isActive }) => isActive ? "text-red-500" : "text-black"}>About</NavLink>
                 <NavLink to="/contact" onClick={() => setMenuOpen(false)} className={({ isActive }) => isActive ? "text-red-500" : "text-black"}>Contact</NavLink>
               </ul>
-
-              {/* Search Input (Mobile)
-              <div className="w-full mt-4 relative">
-                <input
-                  type="text"
-                  placeholder="Search"
-                  className="w-full border border-black text-gray-700 rounded-full px-10 py-1 focus:outline-none focus:ring-1 focus:ring-black"
-                />
-                <IoMdSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-black text-lg" />
-              </div> */}
             </motion.div>
           )}
         </AnimatePresence>
       </motion.div>
 
       {/* Bottom Mobile Navbar */}
-
       <motion.div
         initial={{ y: 50 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.3 }}
-        className="sm:hidden fixed bottom-0 left-0 w-full bg-green-600 py-2 flex justify-around items-center z-40 text-white shadow"
+        className="sm:hidden fixed bottom-0 left-0 w-full bg-green-600 py-1  flex justify-around items-center z-40 text-white shadow"
       >
         <Link to="/"
           className={`flex flex-col items-center text-sm ${isActive('/') ? 'text-yellow-400' : ''
@@ -237,42 +211,14 @@ const Navbar = () => {
           Wishlist
         </Link>
 
-        {/* <Link
-          to="/notifications"
-          className={`flex flex-col items-center text-sm ${isActive('/notifications') ? 'text-yellow-400' : ''
-            }`}
-        >
-          <FaBell className="text-xl" />
-          Alerts
-        </Link> */}
-
-        {/* <button
+        <button
           onClick={handleProfileClick}
-          className={`flex flex-col items-center text-sm ${(authed && role === 'seller' && isActive('/seller/profile')) ||
-            (authed && role !== 'seller' && isActive('/customer-dashboard')) ||
-            (!authed && isActive('/profile'))
-            ? 'text-yellow-400'
-            : ''
-            }`}
+          className={`flex flex-col items-center text-sm `}
         >
           <FaUserCircle className="text-xl" />
           Profile
-        </button> */}
+        </button>
 
-        <button
-      onClick={handleProfileClick}
-      className={`flex flex-col items-center text-sm ${
-        (authed && role === "seller" && isActive("/seller/profile")) ||
-        (authed && role !== "seller" && isActive("/customer-dashboard")) ||
-        (!authed && isActive("/profile"))
-          ? "text-yellow-400"
-          : ""
-      }`}
-    >
-      <FaUserCircle className="text-xl" />
-      Profile
-    </button>
-    
       </motion.div>
     </div>
   );

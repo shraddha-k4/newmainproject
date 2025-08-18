@@ -120,12 +120,12 @@ const MyProducts = () => {
                 <th className="p-3 border border-gray-500">Brand</th>
                 <th className="p-3 border border-gray-500">Price</th>
                 <th className="p-3 border border-gray-500">Category</th>
-                <th className="p-3 border border-gray-500">Description</th>
+                {/* <th className="p-3 border border-gray-500">Description</th>
                 <th className="p-3 border border-gray-500">Ingredients</th>
                 <th className="p-3 border border-gray-500">Ideal For</th>
                 <th className="p-3 border border-gray-500">Shelf Life</th>
                 <th className="p-3 border border-gray-500">Manufacturer</th>
-                <th className="p-3 border border-gray-500">FSSAI</th>
+                <th className="p-3 border border-gray-500">FSSAI</th> */}
                 <th className="p-3 border border-gray-500">Size</th>
                 <th className="p-3 border border-gray-500">MFG Date</th>
                 <th className="p-3 border border-gray-500">Actions</th>
@@ -162,7 +162,7 @@ const MyProducts = () => {
                   <td className="p-3 border border-gray-500">{product.brand}</td>
                   <td className="p-3 border border-gray-500 text-green-600 font-semibold">₹{product.price}</td>
                   <td className="p-3 border border-gray-500">{product.category}</td>
-                  <td className="p-3 border border-gray-500 max-w-xs text-gray-700">
+                  {/* <td className="p-3 border border-gray-500 max-w-xs text-gray-700">
                     {expandedDesc === product._id ? (
                       <>
                         {product.description}{' '}
@@ -216,9 +216,9 @@ const MyProducts = () => {
                   <td className="p-3 border border-gray-500">{product.idealFor || '-'}</td>
                   <td className="p-3 border border-gray-500">{product.shelfLife || '-'}</td>
                   <td className="p-3 border border-gray-500">{product.manufacturer || '-'}</td>
-                  <td className="p-3 border border-gray-500">{product.fssai || '-'}</td>
-                  <td className="p-3 border border-gray-500">{product.size || '-'}</td>
-                  {/* <td className="p-3 border border-gray-500">{product.mfgdate || '-'}</td> */}
+                  <td className="p-3 border border-gray-500">{product.fssai || '-'}</td>*/}
+                  <td className="p-3 border border-gray-500">{product.size || '-'}</td> 
+                
                   <td className="p-3 border border-gray-500">
                     {product.mfgdate
                       ? new Date(product.mfgdate).toLocaleDateString('en-GB') // DD/MM/YYYY format

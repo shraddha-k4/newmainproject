@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Counter from '../component/Counter.jsx';
 import Footer from './Footer.jsx';
 import Loading from '../component/Loading.jsx';
+import Recom from '../component/Recom.jsx';
 
 const SingleProduct = () => {
   const { id } = useParams();
@@ -231,6 +232,7 @@ const SingleProduct = () => {
         )}
       </AnimatePresence>
     </div>
+    <Recom category={product.category} excludeId={product._id} />
     <Footer/>
     </>
   );

@@ -66,6 +66,7 @@ const Hide = () => {
             />
           </motion.div>
         ))}
+        
       </Slider>
      
     </div>

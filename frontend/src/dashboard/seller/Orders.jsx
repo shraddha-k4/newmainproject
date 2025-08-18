@@ -1,9 +1,8 @@
-
 // import React, { useEffect, useState } from "react";
 // import axios from "axios";
 // import SellerSidebar from "./SellerSidebar.jsx";
 // import SellerNavbar from "./SellerNavbar.jsx";
-// import { seller_order } from "../../api/ApiEndPoints.jsx";
+// import { seller_order, updateOrderItemStatusApi } from "../../api/ApiEndPoints.jsx";
 
 // const Orders = () => {
 //   const [orders, setOrders] = useState([]);
@@ -28,6 +27,35 @@
 //       console.error("Error fetching seller orders:", error);
 //     } finally {
 //       setLoading(false);
+//     }
+//   };
+
+//   const handleStatusChange = async (orderId, itemId, newStatus) => {
+//     try {
+//       const token = localStorage.getItem("token");
+//       await axios.put(
+//         updateOrderItemStatusApi(orderId, itemId),
+//         { status: newStatus },
+//         { headers: { Authorization: `Bearer ${token}` } }
+//       );
+
+//       setOrders((prevOrders) =>
+//         prevOrders.map((order) =>
+//           order._id === orderId
+//             ? {
+//                 ...order,
+//                 items: order.items.map((item) =>
+//                   item._id === itemId
+//                     ? { ...item, status: newStatus }
+//                     : item
+//                 ),
+//               }
+//             : order
+//         )
+//       );
+//     } catch (error) {
+//       console.error("Failed to update order item status:", error);
+//       alert("Status update failed");
 //     }
 //   };
 
@@ -79,7 +107,7 @@
 //                   const product = item.productId || {};
 //                   const imageUrl =
 //                     Array.isArray(product.images) && product.images.length > 0
-//                       ? product.images[0] // ✅ Cloudinary image URL
+//                       ? product.images[0]
 //                       : "/placeholder.png";
 
 //                   return (
@@ -103,6 +131,25 @@
 //                         <p>Quantity: {item.quantity}</p>
 //                         <p>Unit Price: ₹{item.price.toFixed(2)}</p>
 //                         <p>Item Total: ₹{item.totalAmount.toFixed(2)}</p>
+
+//                         {/* Item-specific status dropdown */}
+//                         <select
+//                           value={item.status}
+//                           onChange={(e) =>
+//                             handleStatusChange(
+//                               order._id,
+//                               item._id,
+//                               e.target.value
+//                             )
+//                           }
+//                           className="mt-2 p-2 border rounded"
+//                         >
+//                           <option value="Pending">Pending</option>
+//                           <option value="Processing">Processing</option>
+//                           <option value="Shipped">Shipped</option>
+//                           <option value="Delivered">Delivered</option>
+//                           <option value="Cancelled">Cancelled</option>
+//                         </select>
 //                       </div>
 //                     </div>
 //                   );
@@ -123,7 +170,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import SellerSidebar from "./SellerSidebar.jsx";
 import SellerNavbar from "./SellerNavbar.jsx";
-import { seller_order } from "../../api/ApiEndPoints.jsx";
+import { seller_order, updateOrderItemStatusApi } from "../../api/ApiEndPoints.jsx";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -151,26 +198,31 @@ const Orders = () => {
     }
   };
 
-  const handleStatusChange = async (orderId, newStatus) => {
+  const handleStatusChange = async (orderId, itemId, newStatus) => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `${seller_order}/${orderId}/status`,
+        updateOrderItemStatusApi(orderId, itemId),
         { status: newStatus },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
-          order._id === orderId ? { ...order, status: newStatus } : order
+          order._id === orderId
+            ? {
+                ...order,
+                items: order.items.map((item) =>
+                  item._id === itemId
+                    ? { ...item, status: newStatus }
+                    : item
+                ),
+              }
+            : order
         )
       );
     } catch (error) {
-      console.error("Failed to update order status:", error);
+      console.error("Failed to update order item status:", error);
       alert("Status update failed");
     }
   };
@@ -199,9 +251,13 @@ const Orders = () => {
                 <div className="mb-2 text-sm text-gray-600">
                   <p>
                     <span className="font-semibold">Buyer:</span>{" "}
-                    {order.buyer?.name} ({order.buyer?.email})
+                    {order.buyer?.name} 
                   </p>
                   <p>
+                    <span className="font-semibold">Buyer Email:</span>{" "}
+                    {order.buyer?.email}
+                  </p>
+                  {/* <p>
                     <span className="font-semibold">Order Date:</span>{" "}
                     {new Date(order.createdAt).toLocaleDateString()}
                   </p>
@@ -216,22 +272,7 @@ const Orders = () => {
                     >
                       {order.status}
                     </span>
-                  </p>
-
-                  {/* Status Dropdown */}
-                  <select
-                    value={order.status}
-                    onChange={(e) =>
-                      handleStatusChange(order._id, e.target.value)
-                    }
-                    className="mt-2 p-2 border rounded"
-                  >
-                    <option value="Pending">Pending</option>
-                    <option value="Processing">Processing</option>
-                    <option value="Shipped">Shipped</option>
-                    <option value="Delivered">Delivered</option>
-                    <option value="Cancelled">Cancelled</option>
-                  </select>
+                  </p> */}
                 </div>
 
                 {order.items.map((item, idx) => {
@@ -240,6 +281,9 @@ const Orders = () => {
                     Array.isArray(product.images) && product.images.length > 0
                       ? product.images[0]
                       : "/placeholder.png";
+                  const itemDate = item.date
+                    ? new Date(item.date).toLocaleDateString()
+                    : "N/A";
 
                   return (
                     <div
@@ -249,7 +293,7 @@ const Orders = () => {
                       <img
                         src={imageUrl}
                         alt={product.name || "Product"}
-                        className="w-16 h-16 object-contain rounded border"
+                        className="w-25 h-25 object-contain rounded "
                         onError={(e) => {
                           e.target.onerror = null;
                           e.target.src = "/placeholder.png";
@@ -262,6 +306,29 @@ const Orders = () => {
                         <p>Quantity: {item.quantity}</p>
                         <p>Unit Price: ₹{item.price.toFixed(2)}</p>
                         <p>Item Total: ₹{item.totalAmount.toFixed(2)}</p>
+                        <p>
+                          <span className="font-semibold">Item Date:</span>{" "}
+                          {itemDate}
+                        </p>
+
+                        {/* Item-specific status dropdown */}
+                        <select
+                          value={item.status}
+                          onChange={(e) =>
+                            handleStatusChange(
+                              order._id,
+                              item._id,
+                              e.target.value
+                            )
+                          }
+                          className="mt-2 p-2 border rounded"
+                        >
+                          <option value="Pending">Pending</option>
+                          <option value="Processing">Processing</option>
+                          <option value="Shipped">Shipped</option>
+                          <option value="Delivered">Delivered</option>
+                          <option value="Cancelled">Cancelled</option>
+                        </select>
                       </div>
                     </div>
                   );

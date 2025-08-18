@@ -4,6 +4,7 @@ export const baseUrl = "http://localhost:3000";
 export const Auth_login_Api = `${baseUrl}/api/v4/auth/login`;
 export const Auth_signup_Api = `${baseUrl}/api/v4/auth/signup`;
 export const Auth_profile_Api =`${baseUrl}/api/v4/auth/profile`;
+export const Update_Profile_Api = `${baseUrl}/api/v4/auth/update/profile`;
 export const Auth_forgotpass_Api = `${baseUrl}/api/v4/auth/forgot-password`;
 //add product
 export const Add_Product_Api= `${baseUrl}/api/v4/addproduct`;
@@ -26,3 +27,5 @@ export const remove_to_wishlist =`${baseUrl}/api/wishlist/remove`;
 export const create_order =`${baseUrl}/api/order/createorder`;
 export const my_order = `${baseUrl}/api/order/myorder`;
 export const seller_order =`${baseUrl}/api/order/sellerorders`;
+export const updateOrderItemStatusApi = (orderId, itemId) =>`${baseUrl}/api/order/${orderId}/item/${itemId}/status`;
+export const removeOrderItemApi = (orderId, itemId) =>`${baseUrl}/api/order/${orderId}/item/${itemId}`;
